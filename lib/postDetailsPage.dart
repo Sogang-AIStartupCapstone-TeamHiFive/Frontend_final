@@ -45,7 +45,7 @@ class PostDetailsPage extends StatelessWidget {
                   child: CarouselSlider(
                     options: CarouselOptions(
                       height: 200,
-                      autoPlay: true,
+                      autoPlay: post.images_url.length > 1, // 이미지가 2개 이상일 때만 자동 슬라이드
                       enlargeCenterPage: true,
                     ),
                     items: post.images_url.map((url) {

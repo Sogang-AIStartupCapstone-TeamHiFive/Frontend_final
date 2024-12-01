@@ -10,17 +10,24 @@ class FriendPostsPage extends StatefulWidget {
 }
 
 class _FriendPostsPageState extends State<FriendPostsPage> {
-  List<Friend> friends = UserService.getFriends(UserService().usersData).values.toList();
+  // 전체 친구 리스트를 불러오되 user_id=1은 제외
+  List<Friend> allFriends = UserService.getFriends(UserService().usersData)
+      .values
+      .where((friend) => friend.user_id != 1)
+      .toList();
 
-  // 선택된 텍스트 상태
-  String selectedOption = '친구 이름 순'; // 기본값 설정
+  // 현재 표시할 친구 리스트
+  List<Friend> friends = [];
+
+  // 선택된 필터 옵션
+  String selectedOption = '최근 글 올린 친구 순'; // 기본값 설정
   final GlobalKey _buttonKey = GlobalKey(); // 버튼 위치를 찾기 위한 키
 
   // 옵션 리스트
   final List<String> options = [
-    '친구 이름 순',
     '최근 글 올린 친구 순',
-    '친한 친구 순'
+    '친구 이름 순',
+    '친한 친구'
   ];
 
   // 드롭다운 메뉴가 열려 있는지 상태
@@ -32,6 +39,7 @@ class _FriendPostsPageState extends State<FriendPostsPage> {
   @override
   void initState() {
     super.initState();
+    friends = List.from(allFriends); // 초기에는 모든 친구 표시
     _scrollController.addListener(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {}); // 상태를 업데이트하여 스크롤바를 최신 상태로 유지
@@ -80,7 +88,7 @@ class _FriendPostsPageState extends State<FriendPostsPage> {
                         onTap: () {
                           setState(() {
                             selectedOption = option;
-                            print(selectedOption);
+                            _applyFilter(); // 필터 적용
                           });
                           Navigator.of(context).pop(); // 선택 후 닫기
                         },
@@ -103,7 +111,7 @@ class _FriendPostsPageState extends State<FriendPostsPage> {
                                 ),
                               ),
                               if (option == selectedOption)
-                                Icon(Icons.check, color: Color(0xFFBB2F30), size: 50,),
+                                Icon(Icons.check, color: Color(0xFFBB2F30), size: 50),
                             ],
                           ),
                         ),
@@ -119,23 +127,26 @@ class _FriendPostsPageState extends State<FriendPostsPage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void _applyFilter() {
     if (selectedOption == '친구 이름 순') {
+      friends = List.from(allFriends);
       friends.sort((a, b) => a.name.compareTo(b.name));
-    }
-    if (selectedOption == '최근 글 올린 친구 순') {
+    } else if (selectedOption == '최근 글 올린 친구 순') {
       List<int> sortedUserIds = UserService().getUsersSortedByMostRecentPost();
-      print(sortedUserIds);
-
-      // friends 리스트를 sortedUserIds의 순서에 맞게 정렬
+      friends = List.from(allFriends); // 초기화 후 정렬 적용
       friends.sort((a, b) {
         int indexA = sortedUserIds.indexOf(a.user_id);
         int indexB = sortedUserIds.indexOf(b.user_id);
         return indexA.compareTo(indexB); // 리스트 순서대로 정렬
       });
+    } else if (selectedOption == '친한 친구') {
+      friends = allFriends.where((friend) => friend.friend_ship == true).toList();
     }
+  }
 
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Padding(
@@ -272,41 +283,7 @@ class _FriendPostsPageState extends State<FriendPostsPage> {
   }
 }
 
-class CustomScrollbar extends StatelessWidget {
-  final ScrollController scrollController;
-  final Color thumbColor;
-  final Color trackColor;
-  final Color trackPassedColor;
-  final double thumbThickness;
-  final double trackThickness;
-
-  CustomScrollbar({
-    required this.scrollController,
-    required this.thumbColor,
-    required this.trackColor,
-    required this.trackPassedColor,
-    required this.thumbThickness,
-    required this.trackThickness,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: CustomScrollbarPainter(
-        scrollController: scrollController,
-        thumbColor: thumbColor,
-        trackColor: trackColor,
-        trackPassedColor: trackPassedColor,
-        thumbThickness: thumbThickness,
-        trackThickness: trackThickness,
-      ),
-      child: Container(
-        width: thumbThickness,
-      ),
-    );
-  }
-}
-
+// CustomScrollbarPainter 클래스 정의
 class CustomScrollbarPainter extends CustomPainter {
   final ScrollController scrollController;
   final Color thumbColor;
