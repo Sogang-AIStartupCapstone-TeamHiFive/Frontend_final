@@ -184,6 +184,7 @@ class _FriendPageState extends State<FriendPage> {
                         style: TextStyle(
                           fontFamily: 'NotoSans',
                           fontSize: 24,
+                          fontWeight: FontWeight.w700
                         ),
                       ),
 
