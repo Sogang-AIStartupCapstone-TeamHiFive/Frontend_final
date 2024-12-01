@@ -38,10 +38,10 @@ class ProfilePage extends StatelessWidget {
                         : null, // 이미지가 없으면 아무것도 표시하지 않음
                   ),
                 ),
+                SizedBox(height: 16),
                 Container(
-                  padding: EdgeInsets.only(top: 45, left: 16, right: 16),
+                  padding: EdgeInsets.only(top: 30, left: 16, right: 16, bottom: 16), // 상하좌우 공백 조정
                   width: 394,
-                  height: 230,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(24),
@@ -59,124 +59,93 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Column(
-                    children: [
-                      Text(
-                        selectedFriend?.name ?? '사용자명',
-                        style: TextStyle(
-                          fontFamily: 'NotoSans',
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
+                  child: IntrinsicHeight( // 내용에 따라 높이가 동적으로 조정됨
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min, // 높이를 최소로 제한
+                      children: [
+                        Text(
+                          selectedFriend?.name ?? '사용자명',
+                          style: TextStyle(
+                            fontFamily: 'NotoSans',
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                '${selectedFriend != null ? UserService().getPosts(selectedFriend!.user_id).length : 0}',
-                                style: TextStyle(
-                                  fontFamily: 'NotoSans',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFFBB2F30),
-                                  height: 1,
+                        SizedBox(height: 8), // 공백 최소화
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  '${selectedFriend != null ? UserService().getPosts(selectedFriend!.user_id).length : 0}',
+                                  style: TextStyle(
+                                    fontFamily: 'NotoSans',
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFBB2F30),
+                                    height: 1,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 4,),
-                              Text(
-                                '게시물 수',
-                                style: TextStyle(
+                                SizedBox(height: 4),
+                                Text(
+                                  '게시물 수',
+                                  style: TextStyle(
                                     fontFamily: 'NotoSans',
                                     fontSize: 20,
-                                    color: Color(0xFF544C4C)
+                                    color: Color(0xFF544C4C),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                '${selectedFriend != null ? Random().nextInt(1000) : UserService.getFriends(UserService().usersData).length}',
-                                style: TextStyle(
-                                  fontFamily: 'NotoSans',
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFFBB2F30),
-                                  height: 1,
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(
+                                  '${selectedFriend != null ? Random().nextInt(1000) : UserService.getFriends(UserService().usersData).length}',
+                                  style: TextStyle(
+                                    fontFamily: 'NotoSans',
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFBB2F30),
+                                    height: 1,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 4,),
-                              Text(
-                                '친구 수',
-                                style: TextStyle(
+                                SizedBox(height: 4),
+                                Text(
+                                  '친구 수',
+                                  style: TextStyle(
                                     fontFamily: 'NotoSans',
                                     fontSize: 20,
-                                    color: Color(0xFF544C4C)
+                                    color: Color(0xFF544C4C),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 14),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            width: 124,
-                            height: 35,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFBB2F30),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.only(bottom: 2.5, left: 2, right: 2),
-                              ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16), // bio 위 공백 조정
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
                               child: Text(
-                                selectedFriend != null ? '친구 추가' : '편집',
+                                selectedFriend?.bio ?? '소개글이 없습니다.',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  height: 1,
                                   fontFamily: 'NotoSans',
-                                  color: Colors.white,
-                                  fontSize: 24,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black, // 줄 간격 최소화
                                 ),
                               ),
                             ),
-                          ),
-                          Container(
-                            width: 124,
-                            height: 35,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFBB2F30),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.only(bottom: 2.5, left: 2, right: 2),
-                              ),
-                              child: Text(
-                                selectedFriend != null ? '단짝 설정' : '설정',
-                                style: TextStyle(
-                                  height: 1,
-                                  fontFamily: 'NotoSans',
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 16), // 게시물과 박스 사이 간격 유지
                 // 게시물이 들어갈 부분
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
