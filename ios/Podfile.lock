@@ -9,16 +9,22 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
+  - speech_to_text (0.0.1):
+    - Flutter
+    - Try
+  - Try (2.1.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - speech_to_text (from `.symlinks/plugins/speech_to_text/ios`)
 
 SPEC REPOS:
   trunk:
     - flutter_sound_core
+    - Try
 
 EXTERNAL SOURCES:
   Flutter:
@@ -29,6 +35,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
+  speech_to_text:
+    :path: ".symlinks/plugins/speech_to_text/ios"
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
@@ -36,7 +44,9 @@ SPEC CHECKSUMS:
   flutter_sound_core: 1c460e127e210271e1556fcf417286b747cd3cf9
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  speech_to_text: b43a7d99aef037bd758ed8e45d79bbac035d2dfe
+  Try: 5ef669ae832617b3cee58cb2c6f99fb767a4ff96
 
-PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
+PODFILE CHECKSUM: 29d7574a37760b4c167be524b87c1dae97c16458
 
 COCOAPODS: 1.15.2
