@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'UserData.dart';
+import 'package:http/http.dart' as http;
 
 class PostDetailsPage extends StatelessWidget {
   final Post post;
 
   PostDetailsPage({required this.post});
+
+  Future<void> _deletePost(BuildContext context) async {
+    final response = await http.delete(
+      Uri.parse('http://52.78.132.208:8002/posts/${post.post_id}'),
+      headers: {'accept': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('게시물이 삭제되었습니다.')),
+      );
+      Navigator.of(context).pop(); // 이전 화면으로 돌아가기
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('게시물 삭제에 실패했습니다.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +51,37 @@ class PostDetailsPage extends StatelessWidget {
             ),
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete, size: 30, color: Colors.red), // 삭제 아이콘
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('게시물 삭제'),
+                    content: Text('정말로 이 게시물을 삭제하시겠습니까?'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('취소'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: Text('삭제'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          _deletePost(context);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -126,15 +176,6 @@ class PostDetailsPage extends StatelessWidget {
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                         color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      '댓글 수: ${post.comments}',
-                      style: TextStyle(
-                        fontFamily: 'NotoSans',
-                        fontSize: 18,
-                        color: Colors.grey[600],
                       ),
                     ),
                   ],
